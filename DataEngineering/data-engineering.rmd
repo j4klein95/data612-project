@@ -1,0 +1,97 @@
+---
+title: "Data Engineering - Data 612 Project"
+author: "Jared 'Jay' Klein"
+date: "12/1/2021"
+output: html_document
+---
+
+```{r}
+library(tidyverse)
+library(dplyr)
+library(pryr)
+```
+
+## Use tidyverse coding to import the data into R
+```{r}
+setwd("D:\\repo\\data612-project\\")
+
+maryland <- read_csv("data\\maryland.csv")
+virginia <- read_csv("data\\virginia.csv")
+view(virginia)
+view(maryland)
+```
+*Immediately upon importing we can see several features of the dataset. We can see the rows and columns numbers, the datatype of each column, and names associated with each column. These are as follows (pertains to both datasets):*
+1. date - the flight date
+2. carrier - the unique code assigned to each flight
+3. origin - 3-letter Airport abbreviation
+4. origin_city - Name of origin city, state
+5. orig_st_abr - 2-letter state abbreviation
+6. orig_st_name - origin state name
+7. destination - 3-letter destination airport abbreviation
+8. dest_city - destination city, state
+9. dest_st_abr - 2-letter state abbreviation
+10. dest_st_name - destination state name. 
+
+*The numerical or data that is read into memory as a double data type are:*
+11. q - quarter
+12. month - month of sample
+13. day - day of the week (1 being Monday, 7 Sunday)
+14. cancelled - binary 0 being flight was not cancelled
+15. miles - distance travelled
+16. fl_count - no idea
+
+## Use and show R coding that presents your table as a data frame and a tibble
+```{r}
+is_tibble(virginia)
+is.data.frame(virginia)
+is_tibble(maryland)
+is.data.frame(maryland)
+```
+
+## Fully explain the data, providing insight regarding all variables of the data table
+## Use additional R code covered in class to identify and characterize your data table
+```{r}
+summary(virginia)
+dim(virginia)
+```
+*With the virginia dataset we have 16 column features and 103216 row samples. 10 of these column features are saved into memory as character datatypes while the other 6 features are treated as doubles. From a technical standpoint, this means that the 10 character features are taking up the most memory. The summaries of column features 'q', 'month', 'day', and 'f1_count' are not of huge significance given that those columns represent values of pertaining to time and dates. A summary look at miles does show rather interesting statistics such as the median travel distance being 474 and the average miles traveled being 615.*
+```{r}
+summary(maryland)
+dim(maryland)
+```
+*With the Maryland data set we have the same number of column features and with significantly less sample rows. This sort of makes sense given the reality size an d number of airports in Maryland compared to that of Virginia. Interestingly enough the median value of miles traveled is at 611 whereas the mean average miles traveled is at 769, values that are both higher that Virginia.*
+
+## Use tidy R and dplyr functions to modify the data so that it is structured properly for better analysis and processing. Show evidence of new R coding to process and analyze data in the table that we did not cover in class. 
+
+*The Dplyr method 'bind_rows' allows for a very simple concatenation of two data sets. Since both the Virginia and Maryland data sets have identical feature names, the method will very elegantly put the data sets together (one on top of the other.*
+```{r}
+full_data <- bind_rows(virginia, maryland)
+dim(full_data)
+```
+*Now we can do some analysis on this new table.*
+```{r}
+dim(full_data)
+is_tibble(full_data)
+is.data.frame(full_data)
+```
+*We see that this new data set has the exact same number of column features, as expected, but additional rows. Evidence of a successful concatenation of the two data frames. We also verified that it is a tibble and data frame.*
+```{r}
+summary(full_data$miles)
+```
+*Previously, we saw that the summary method gave us some interesting results. When we combine the two we see that the average miles traveled is 657.2 and the median is 500 both values that are between the summary results for this feature in the Maryland and Virginia data sets.*
+
+*One interesting thing we can look at is the new size of the table and how much memory it takes up*
+
+```{r}
+object_size(full_data)
+object_size(virginia)
+object_size(maryland)
+
+object_size(maryland)+ object_size(virginia)
+```
+*You'll notice that, as expected, the full_data table is significantly larger than the Virginia and Maryland data set. Interestingly enough, when you add the two sizes of Virginia and Maryland you get a bytes size that is larger than the full_data table that is essentially the concatenation of the two tables. Why might this be? Probably some minor stuff on the back-end.*
+
+```{r}
+mem_used()
+```
+
