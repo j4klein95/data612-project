@@ -11,7 +11,7 @@ library(dplyr)
 library(pryr)
 ```
 
-## Use tidyverse coding to import the data into R
+# Use tidyverse coding to import the data into R
 ```{r}
 setwd("D:\\repo\\data612-project\\")
 
@@ -40,7 +40,7 @@ view(maryland)
 15. miles - distance travelled
 16. fl_count - no idea
 
-## Use and show R coding that presents your table as a data frame and a tibble
+# Use and show R coding that presents your table as a data frame and a tibble
 ```{r}
 is_tibble(virginia)
 is.data.frame(virginia)
@@ -48,8 +48,8 @@ is_tibble(maryland)
 is.data.frame(maryland)
 ```
 
-## Fully explain the data, providing insight regarding all variables of the data table
-## Use additional R code covered in class to identify and characterize your data table
+# Fully explain the data, providing insight regarding all variables of the data table
+# Use additional R code covered in class to identify and characterize your data table
 ```{r}
 summary(virginia)
 dim(virginia)
@@ -61,7 +61,7 @@ dim(maryland)
 ```
 *With the Maryland data set we have the same number of column features and with significantly less sample rows. This sort of makes sense given the reality size an d number of airports in Maryland compared to that of Virginia. Interestingly enough the median value of miles traveled is at 611 whereas the mean average miles traveled is at 769, values that are both higher that Virginia.*
 
-## Use tidy R and dplyr functions to modify the data so that it is structured properly for better analysis and processing. Show evidence of new R coding to process and analyze data in the table that we did not cover in class. 
+# Use tidy R and dplyr functions to modify the data so that it is structured properly for better analysis and processing. Show evidence of new R coding to process and analyze data in the table that we did not cover in class. 
 
 *The Dplyr method 'bind_rows' allows for a very simple concatenation of two data sets. Since both the Virginia and Maryland data sets have identical feature names, the method will very elegantly put the data sets together (one on top of the other.*
 ```{r}
@@ -91,7 +91,38 @@ object_size(maryland)+ object_size(virginia)
 ```
 *You'll notice that, as expected, the full_data table is significantly larger than the Virginia and Maryland data set. Interestingly enough, when you add the two sizes of Virginia and Maryland you get a bytes size that is larger than the full_data table that is essentially the concatenation of the two tables. Why might this be? Probably some minor stuff on the back-end.*
 
+
+*Lets see if we can do some more work with the data to enable further analysis. Lets start with giving day, month, and quarters proper names.*
 ```{r}
-mem_used()
+full_data <- full_data %>%
+  mutate(day = recode(day, `1` = "Monday", `2` = "Tuesday", `3` = "Wednesday", `4` = "Thursday", `5` = "Friday", `6` = "Saturday", `7` = "Sunday")) %>%
+  mutate(month = recode(month, `1` = "January", `2` = "February", `3` = "March", `4` = "April", `5` = "May", `6` = "June", `7` = "July", `8` = "August", `9` = "September", `10` = "October", `11` = "November", `12` = "December")) %>%
+  mutate(q = recode(q, `1` = "First Quarter", `2` = "Second Quarter", `3` = "Third Quarter", `4` = "Fourth Quarter"))%>%
+  rename(quarter = q)
+
+head(full_data)
+tail(full_data)
+```
+
+*From here we can do a number of different analysis based on day, month, and quarter. Lets keep it high level at quarter for now. How many cancellations occurred in each quarter?*
+```{r}
+full_data %>%
+  
+```
+
+
+```{r}
+full_data %>%
+  group_by(quarter)%>%
+  count(cancelled)%>%
+  filter(cancelled == 1)
+```
+
+```{r}
+full_data %>%
+  group_by(quarter, cancelled)%>%
+  summarise(n = n()) %>%
+  mutate(ratio = round(100 * n/sum(n), 0)) %>%
+  filter(cancelled == 1)
 ```
 
