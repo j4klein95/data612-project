@@ -187,11 +187,14 @@ library(pryr)</code></pre>
 <pre><code>## The following objects are masked from &#39;package:purrr&#39;:
 ## 
 ##     compose, partial</code></pre>
-<div id="use-tidyverse-coding-to-import-the-data-into-r" class="section level2">
-<h2>Use tidyverse coding to import the data into R</h2>
+<div id="use-tidyverse-coding-to-import-the-data-into-r" class="section level1">
+<h1>Use tidyverse coding to import the data into R</h1>
 <pre class="r"><code>setwd(&quot;D:\\repo\\data612-project\\&quot;)
 
 maryland &lt;- read_csv(&quot;data\\maryland.csv&quot;)</code></pre>
+<pre><code>## Warning in gzfile(file, mode): cannot open compressed file &#39;C:/Users/spart/
+## AppData/Local/Temp/RtmpYtjvul\file15a855774834&#39;, probable reason &#39;No such file
+## or directory&#39;</code></pre>
 <pre><code>## Rows: 38523 Columns: 16</code></pre>
 <pre><code>## -- Column specification --------------------------------------------------------
 ## Delimiter: &quot;,&quot;
@@ -212,10 +215,10 @@ maryland &lt;- read_csv(&quot;data\\maryland.csv&quot;)</code></pre>
 <pre class="r"><code>view(virginia)
 view(maryland)</code></pre>
 <p><em>Immediately upon importing we can see several features of the dataset. We can see the rows and columns numbers, the datatype of each column, and names associated with each column. These are as follows (pertains to both datasets):</em> 1. date - the flight date 2. carrier - the unique code assigned to each flight 3. origin - 3-letter Airport abbreviation 4. origin_city - Name of origin city, state 5. orig_st_abr - 2-letter state abbreviation 6. orig_st_name - origin state name 7. destination - 3-letter destination airport abbreviation 8. dest_city - destination city, state 9. dest_st_abr - 2-letter state abbreviation 10. dest_st_name - destination state name.</p>
-<p><em>The numerical or data that is read into memory as a double data type are:</em> 11. q - quarter 12. month - month of sample 13. day - day of the week (1 being Monday, 7 Sunday) 14. cancelled - binary 0 being flight was not cancelled 15. miles - distance travelled 16. fl_count - no idea</p>
+<p><em>The numerical or data that is read into memory as a double data type are:</em> 11. q - quarter (1: Jan-March, 2:Apr-June) 12. month - month of sample 13. day - day of the week (1 being Monday, 7 Sunday) 14. cancelled - binary 0 being flight was not cancelled 15. miles - distance travelled 16. fl_count - no idea</p>
 </div>
-<div id="use-and-show-r-coding-that-presents-your-table-as-a-data-frame-and-a-tibble" class="section level2">
-<h2>Use and show R coding that presents your table as a data frame and a tibble</h2>
+<div id="use-and-show-r-coding-that-presents-your-table-as-a-data-frame-and-a-tibble" class="section level1">
+<h1>Use and show R coding that presents your table as a data frame and a tibble</h1>
 <pre class="r"><code>is_tibble(virginia)</code></pre>
 <pre><code>## [1] TRUE</code></pre>
 <pre class="r"><code>is.data.frame(virginia)</code></pre>
@@ -225,11 +228,11 @@ view(maryland)</code></pre>
 <pre class="r"><code>is.data.frame(maryland)</code></pre>
 <pre><code>## [1] TRUE</code></pre>
 </div>
-<div id="fully-explain-the-data-providing-insight-regarding-all-variables-of-the-data-table" class="section level2">
-<h2>Fully explain the data, providing insight regarding all variables of the data table</h2>
+<div id="fully-explain-the-data-providing-insight-regarding-all-variables-of-the-data-table" class="section level1">
+<h1>Fully explain the data, providing insight regarding all variables of the data table</h1>
 </div>
-<div id="use-additional-r-code-covered-in-class-to-identify-and-characterize-your-data-table" class="section level2">
-<h2>Use additional R code covered in class to identify and characterize your data table</h2>
+<div id="use-additional-r-code-covered-in-class-to-identify-and-characterize-your-data-table" class="section level1">
+<h1>Use additional R code covered in class to identify and characterize your data table</h1>
 <pre class="r"><code>summary(virginia)</code></pre>
 <pre><code>##        q             month            day            date          
 ##  Min.   :1.000   Min.   :1.000   Min.   :1.000   Length:103216     
@@ -295,8 +298,8 @@ view(maryland)</code></pre>
 <pre><code>## [1] 38523    16</code></pre>
 <p><em>With the Maryland data set we have the same number of column features and with significantly less sample rows. This sort of makes sense given the reality size an d number of airports in Maryland compared to that of Virginia. Interestingly enough the median value of miles traveled is at 611 whereas the mean average miles traveled is at 769, values that are both higher that Virginia.</em></p>
 </div>
-<div id="use-tidy-r-and-dplyr-functions-to-modify-the-data-so-that-it-is-structured-properly-for-better-analysis-and-processing.-show-evidence-of-new-r-coding-to-process-and-analyze-data-in-the-table-that-we-did-not-cover-in-class." class="section level2">
-<h2>Use tidy R and dplyr functions to modify the data so that it is structured properly for better analysis and processing. Show evidence of new R coding to process and analyze data in the table that we did not cover in class.</h2>
+<div id="use-tidy-r-and-dplyr-functions-to-modify-the-data-so-that-it-is-structured-properly-for-better-analysis-and-processing.-show-evidence-of-new-r-coding-to-process-and-analyze-data-in-the-table-that-we-did-not-cover-in-class." class="section level1">
+<h1>Use tidy R and dplyr functions to modify the data so that it is structured properly for better analysis and processing. Show evidence of new R coding to process and analyze data in the table that we did not cover in class.</h1>
 <p><em>The Dplyr method ‘bind_rows’ allows for a very simple concatenation of two data sets. Since both the Virginia and Maryland data sets have identical feature names, the method will very elegantly put the data sets together (one on top of the other.</em></p>
 <pre class="r"><code>full_data &lt;- bind_rows(virginia, maryland)
 dim(full_data)</code></pre>
@@ -323,8 +326,134 @@ dim(full_data)</code></pre>
 <pre class="r"><code>object_size(maryland)+ object_size(virginia)</code></pre>
 <pre><code>## 18,214,520 B</code></pre>
 <p><em>You’ll notice that, as expected, the full_data table is significantly larger than the Virginia and Maryland data set. Interestingly enough, when you add the two sizes of Virginia and Maryland you get a bytes size that is larger than the full_data table that is essentially the concatenation of the two tables. Why might this be? Probably some minor stuff on the back-end.</em></p>
-<pre class="r"><code>mem_used()</code></pre>
-<pre><code>## 115 MB</code></pre>
+<p><em>Lets see if we can do some more work with the data to enable further analysis. Lets start with giving day, month, and quarters proper names.</em></p>
+<pre class="r"><code>full_data &lt;- full_data %&gt;%
+  mutate(day = recode(day, `1` = &quot;Monday&quot;, `2` = &quot;Tuesday&quot;, `3` = &quot;Wednesday&quot;, `4` = &quot;Thursday&quot;, `5` = &quot;Friday&quot;, `6` = &quot;Saturday&quot;, `7` = &quot;Sunday&quot;)) %&gt;%
+  mutate(month = recode(month, `1` = &quot;January&quot;, `2` = &quot;February&quot;, `3` = &quot;March&quot;, `4` = &quot;April&quot;, `5` = &quot;May&quot;, `6` = &quot;June&quot;, `7` = &quot;July&quot;, `8` = &quot;August&quot;, `9` = &quot;September&quot;, `10` = &quot;October&quot;, `11` = &quot;November&quot;, `12` = &quot;December&quot;)) %&gt;%
+  mutate(q = recode(q, `1` = &quot;First Quarter&quot;, `2` = &quot;Second Quarter&quot;, `3` = &quot;Third Quarter&quot;, `4` = &quot;Fourth Quarter&quot;))%&gt;%
+  rename(quarter = q)
+
+head(full_data)</code></pre>
+<pre><code>## # A tibble: 6 x 16
+##   quarter  month day   date  carrier origin origin_city orig_st_abr orig_st_name
+##   &lt;chr&gt;    &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;   &lt;chr&gt;  &lt;chr&gt;       &lt;chr&gt;       &lt;chr&gt;       
+## 1 First Q~ Janu~ Wedn~ 1/1/~ WN      ORF    Norfolk, VA VA          Virginia    
+## 2 First Q~ Janu~ Wedn~ 1/1/~ WN      ORF    Norfolk, VA VA          Virginia    
+## 3 First Q~ Janu~ Wedn~ 1/1/~ WN      ORF    Norfolk, VA VA          Virginia    
+## 4 First Q~ Janu~ Wedn~ 1/1/~ WN      ORF    Norfolk, VA VA          Virginia    
+## 5 First Q~ Janu~ Wedn~ 1/1/~ WN      ORF    Norfolk, VA VA          Virginia    
+## 6 First Q~ Janu~ Wedn~ 1/1/~ WN      ORF    Norfolk, VA VA          Virginia    
+## # ... with 7 more variables: destination &lt;chr&gt;, dest_city &lt;chr&gt;,
+## #   dest_st_abr &lt;chr&gt;, dest_st_name &lt;chr&gt;, cancelled &lt;dbl&gt;, miles &lt;dbl&gt;,
+## #   fl_count &lt;dbl&gt;</code></pre>
+<pre class="r"><code>tail(full_data)</code></pre>
+<pre><code>## # A tibble: 6 x 16
+##   quarter  month day   date  carrier origin origin_city orig_st_abr orig_st_name
+##   &lt;chr&gt;    &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;   &lt;chr&gt;  &lt;chr&gt;       &lt;chr&gt;       &lt;chr&gt;       
+## 1 Second ~ June  Mond~ 6/8/~ AS      BWI    Baltimore,~ MD          Maryland    
+## 2 Second ~ June  Tues~ 6/9/~ AS      BWI    Baltimore,~ MD          Maryland    
+## 3 Second ~ June  Wedn~ 6/10~ AS      BWI    Baltimore,~ MD          Maryland    
+## 4 Second ~ June  Thur~ 6/11~ AS      BWI    Baltimore,~ MD          Maryland    
+## 5 Second ~ June  Frid~ 6/12~ AS      BWI    Baltimore,~ MD          Maryland    
+## 6 Second ~ June  Satu~ 6/13~ AS      BWI    Baltimore,~ MD          Maryland    
+## # ... with 7 more variables: destination &lt;chr&gt;, dest_city &lt;chr&gt;,
+## #   dest_st_abr &lt;chr&gt;, dest_st_name &lt;chr&gt;, cancelled &lt;dbl&gt;, miles &lt;dbl&gt;,
+## #   fl_count &lt;dbl&gt;</code></pre>
+<p><em>From here we can do a number of different analysis based on day, month, and quarter. Lets keep it high level at quarter for now. How many cancellations occurred in each quarter?</em></p>
+<pre class="r"><code>full_data %&gt;%
+  group_by(quarter) %&gt;%
+  summarise(n = n()) %&gt;%
+  rename(total_flights = n)</code></pre>
+<pre><code>## # A tibble: 2 x 2
+##   quarter        total_flights
+##   &lt;chr&gt;                  &lt;int&gt;
+## 1 First Quarter         101814
+## 2 Second Quarter         39925</code></pre>
+<pre class="r"><code>full_data %&gt;%
+  group_by(quarter)%&gt;%
+  count(cancelled)%&gt;%
+  filter(cancelled == 1)</code></pre>
+<pre><code>## # A tibble: 2 x 3
+## # Groups:   quarter [2]
+##   quarter        cancelled     n
+##   &lt;chr&gt;              &lt;dbl&gt; &lt;int&gt;
+## 1 First Quarter          1  6732
+## 2 Second Quarter         1  8366</code></pre>
+<pre class="r"><code>full_data %&gt;%
+  group_by(quarter, cancelled)%&gt;%
+  summarise(n = n()) %&gt;%
+  mutate(percent_of_flights_cancelled = round(100 * n/sum(n), 0)) %&gt;%
+  filter(cancelled == 1) %&gt;%
+  select(quarter, n, percent_of_flights_cancelled) %&gt;%
+  rename(cancelled_flights = n)</code></pre>
+<pre><code>## `summarise()` has grouped output by &#39;quarter&#39;. You can override using the `.groups` argument.</code></pre>
+<pre><code>## # A tibble: 2 x 3
+## # Groups:   quarter [2]
+##   quarter        cancelled_flights percent_of_flights_cancelled
+##   &lt;chr&gt;                      &lt;int&gt;                        &lt;dbl&gt;
+## 1 First Quarter               6732                            7
+## 2 Second Quarter              8366                           21</code></pre>
+<p><em>So we can see that the first quarter of 2020 had a total of 101814 flights while the second quarter had 39925 flights. Of these flights we see that about 7% of flights (6732 flights) in the first quarter were cancelled while 21% of flights (8366) in the second quarter were cancelled.</em></p>
+<p><em>Staying focused on cancellations, how do cancellations look for each airline? For the sake of trying something new, lets add a column to the data frame based on conditions in the other columns. Specifically, lets add the full name of the airline as a feature to each sample based on the column ‘carrier’</em></p>
+<pre class="r"><code>full_data %&gt;%
+  mutate(airline = case_when(
+    carrier == &quot;AA&quot; ~ &quot;American Airlines&quot;,
+    carrier == &quot;AS&quot; ~ &quot;Alaska Airlines&quot;,
+    carrier == &quot;B6&quot; ~ &quot;JetBlue&quot;,
+    carrier == &quot;DL&quot; ~ &quot;Delta Air Lines&quot;,
+    carrier == &quot;F9&quot; ~ &quot;Frontier Airlines&quot;,
+    carrier == &quot;G4&quot; ~ &quot;Allegiant Air&quot;,
+    carrier == &quot;HA&quot; ~ &quot;Hawaiian Airlines&quot;,
+    carrier == &quot;NK&quot; ~ &quot;Spirit Airlines&quot;,
+    carrier == &quot;UA&quot; ~ &quot;United Airlines&quot;,
+    carrier == &quot;WN&quot; ~ &quot;Southwest Airlines&quot;
+  )) -&gt; full_data</code></pre>
+<p><em>We now have a column feature with the full Airline name in addition to the carrier code. Lets get a sense for how many flights each airline had.</em></p>
+<pre class="r"><code>total_flights_by_airline &lt;- full_data %&gt;%
+  group_by(airline) %&gt;%
+  summarise(n = n()) %&gt;%
+  rename(total_flights = n) %&gt;%
+  arrange(desc(total_flights))
+
+total_flights_by_airline</code></pre>
+<pre><code>## # A tibble: 9 x 2
+##   airline            total_flights
+##   &lt;chr&gt;                      &lt;int&gt;
+## 1 American Airlines          43099
+## 2 Southwest Airlines         36601
+## 3 United Airlines            36048
+## 4 Delta Air Lines            16134
+## 5 JetBlue                     4074
+## 6 Spirit Airlines             2771
+## 7 Alaska Airlines             1400
+## 8 Allegiant Air                855
+## 9 Frontier Airlines            757</code></pre>
+<p><em>We see that American Airlines had the most flights with Southwest, United, and Delta rounding out the top 4 from the 9 airlines sampled. Lets see how many cancelled flights each airline had.</em></p>
+<pre class="r"><code>cancelled_flights_by_airline &lt;- full_data %&gt;%
+  group_by(airline, cancelled)%&gt;%
+  summarise(n = n()) %&gt;%
+  mutate(percent_of_flights_cancelled = round(100 * n/sum(n), 0)) %&gt;%
+  filter(cancelled == 1) %&gt;%
+  select(airline, n, percent_of_flights_cancelled) %&gt;%
+  rename(cancelled_flights = n)</code></pre>
+<pre><code>## `summarise()` has grouped output by &#39;airline&#39;. You can override using the `.groups` argument.</code></pre>
+<pre class="r"><code>airlines_analysis &lt;- total_flights_by_airline%&gt;%
+  full_join(cancelled_flights_by_airline, by=&quot;airline&quot;)
+
+airlines_analysis</code></pre>
+<pre><code>## # A tibble: 9 x 4
+##   airline            total_flights cancelled_flights percent_of_flights_cancell~
+##   &lt;chr&gt;                      &lt;int&gt;             &lt;int&gt;                       &lt;dbl&gt;
+## 1 American Airlines          43099              4767                          11
+## 2 Southwest Airlines         36601              4661                          13
+## 3 United Airlines            36048              3614                          10
+## 4 Delta Air Lines            16134              1257                           8
+## 5 JetBlue                     4074               330                           8
+## 6 Spirit Airlines             2771                46                           2
+## 7 Alaska Airlines             1400                87                           6
+## 8 Allegiant Air                855               269                          31
+## 9 Frontier Airlines            757                67                           9</code></pre>
+<p><em>From this analysis table, we can see that our top 3 airlines (in terms of total flights) typically saw 10-13% of their flights cancelled in the first 2 quarters of 2020 with Southwest Airlines at the high end with 13% percent and United Airlines at the lower end with 10%. Of note is Allegiant Airlines which had the 2nd lowest total flights but the highest percent of flights cancelled seeing 31% of those flights cancelled in our time period for 2020. The lowest percent of flights cancelled belongs to Spirit Airline with only 2% of flights being cancelled.</em></p>
 </div>
 
 

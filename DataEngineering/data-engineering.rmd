@@ -33,7 +33,7 @@ view(maryland)
 10. dest_st_name - destination state name. 
 
 *The numerical or data that is read into memory as a double data type are:*
-11. q - quarter
+11. q - quarter (1: Jan-March, 2:Apr-June)
 12. month - month of sample
 13. day - day of the week (1 being Monday, 7 Sunday)
 14. cancelled - binary 0 being flight was not cancelled
@@ -107,7 +107,9 @@ tail(full_data)
 *From here we can do a number of different analysis based on day, month, and quarter. Lets keep it high level at quarter for now. How many cancellations occurred in each quarter?*
 ```{r}
 full_data %>%
-  
+  group_by(quarter) %>%
+  summarise(n = n()) %>%
+  rename(total_flights = n)
 ```
 
 
@@ -122,7 +124,56 @@ full_data %>%
 full_data %>%
   group_by(quarter, cancelled)%>%
   summarise(n = n()) %>%
-  mutate(ratio = round(100 * n/sum(n), 0)) %>%
-  filter(cancelled == 1)
+  mutate(percent_of_flights_cancelled = round(100 * n/sum(n), 0)) %>%
+  filter(cancelled == 1) %>%
+  select(quarter, n, percent_of_flights_cancelled) %>%
+  rename(cancelled_flights = n)
+```
+*So we can see that the first quarter of 2020 had a total of 101814 flights while the second quarter had 39925 flights. Of these flights we see that about 7% of flights (6732 flights) in the first quarter were cancelled while 21% of flights (8366) in the second quarter were cancelled.*
+
+*Staying focused on cancellations, how do cancellations look for each airline? For the sake of trying something new, lets add a column to the data frame based on conditions in the other columns. Specifically, lets add the full name of the airline as a feature to each sample based on the column 'carrier'*
+```{r}
+full_data %>%
+  mutate(airline = case_when(
+    carrier == "AA" ~ "American Airlines",
+    carrier == "AS" ~ "Alaska Airlines",
+    carrier == "B6" ~ "JetBlue",
+    carrier == "DL" ~ "Delta Air Lines",
+    carrier == "F9" ~ "Frontier Airlines",
+    carrier == "G4" ~ "Allegiant Air",
+    carrier == "HA" ~ "Hawaiian Airlines",
+    carrier == "NK" ~ "Spirit Airlines",
+    carrier == "UA" ~ "United Airlines",
+    carrier == "WN" ~ "Southwest Airlines"
+  )) -> full_data
 ```
 
+*We now have a column feature with the full Airline name in addition to the carrier code. Lets get a sense for how many flights each airline had.*
+```{r}
+total_flights_by_airline <- full_data %>%
+  group_by(airline) %>%
+  summarise(n = n()) %>%
+  rename(total_flights = n) %>%
+  arrange(desc(total_flights))
+
+total_flights_by_airline
+```
+
+*We see that American Airlines had the most flights with Southwest, United, and Delta rounding out the top 4 from the 9 airlines sampled. Lets see how many cancelled flights each airline had.*
+
+```{r}
+cancelled_flights_by_airline <- full_data %>%
+  group_by(airline, cancelled)%>%
+  summarise(n = n()) %>%
+  mutate(percent_of_flights_cancelled = round(100 * n/sum(n), 0)) %>%
+  filter(cancelled == 1) %>%
+  select(airline, n, percent_of_flights_cancelled) %>%
+  rename(cancelled_flights = n)
+
+airlines_analysis <- total_flights_by_airline%>%
+  full_join(cancelled_flights_by_airline, by="airline")
+
+airlines_analysis
+```
+
+*From this analysis table, we can see that our top 3 airlines (in terms of total flights) typically saw 10-13% of their flights cancelled in the first 2 quarters of 2020 with Southwest Airlines at the high end with 13% percent and United Airlines at the lower end with 10%. Of note is Allegiant Airlines which had the 2nd lowest total flights but the highest percent of flights cancelled seeing 31% of those flights cancelled in our time period for 2020. The lowest percent of flights cancelled belongs to Spirit Airline with only 2% of flights being cancelled.*
